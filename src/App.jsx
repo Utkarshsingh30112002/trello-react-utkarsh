@@ -6,6 +6,7 @@ import Boards from "./pages/BoardsPage";
 import SingleBoard from "./pages/SingleBoardPage";
 import MainLayout from "./components/Layouts/MainLayout";
 import CardPage from "./pages/CardPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   return (
@@ -14,8 +15,10 @@ function App() {
         <Routes>
           <Route path='/' element={<MainLayout/>}>
            <Route path='/' element={<Boards />} />
+           <Route path='/boards' element={<Boards />} />
            <Route path='/boards/:id' element={<SingleBoard />} />
            <Route path='/card/:id' element={<CardPage />} />
+           <Route path='/*' element={<NotFoundPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
