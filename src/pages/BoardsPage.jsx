@@ -7,6 +7,7 @@ import { SimpleGrid, Text ,Card, CardHeader} from '@chakra-ui/react';
 import { useEffect, useState } from 'react'
 import PopupForm from '../components/common/PopupForm';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 
 
@@ -29,6 +30,7 @@ const Boards = () => {
     async function addBoard(name){
         if(!name)return;
         await axios.post(`https://api.trello.com/1/boards/?name=${name}&key=${apikey}&token=${apiToken}`)
+        toast.success('Board Created SuccessFully')
         setRefresh((prev)=>!prev);
     }
 

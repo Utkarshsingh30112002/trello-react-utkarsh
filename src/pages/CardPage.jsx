@@ -16,6 +16,7 @@ import { Grid,GridItem  } from "@chakra-ui/react"
 import SingleChecklist from "../components/common/SingleChecklist"
 import PopupForm from "../components/common/PopupForm"
 import { useState } from "react"
+import { toast } from "react-toastify"
 
 
 const CardPage = ({open,setOpen,card,relode,setRelode,loading}) => {
@@ -26,11 +27,15 @@ const CardPage = ({open,setOpen,card,relode,setRelode,loading}) => {
   async function addCheckList(name){
     if(!name)return;
     await axios.post(`https://api.trello.com/1/checklists?idCard=${card.id}&key=${apikey}&token=${apiToken}&name=${name}`)
+    toast.success('CheckList Added SuccessFully')
     setRelode((prev)=>!prev)
 }
 async function delCheckList(checklistId){
+  const confirm = window.confirm('Are you sure you want to delete this CheckList?')
+  if(!confirm)return ;
   const delUrl=`https://api.trello.com/1/checklists/${checklistId}?key=${apikey}&token=${apiToken}`
   await axios.delete(delUrl)
+  toast.success('CheckList Deleted SuccessFully')
   setRelode(prev=>!prev);
 
 }

@@ -12,6 +12,7 @@ import { Editable} from "@chakra-ui/react"
 import { LuCheck, LuPencilLine, LuX } from "react-icons/lu"
 import {FaPlus} from 'react-icons/fa'
 import { CiTrash } from "react-icons/ci";
+import {toast} from 'react-toastify'
 
 
 const SingleChecklist = ({ id ,relode,delCheckList,cardId}) => {
@@ -29,10 +30,10 @@ const SingleChecklist = ({ id ,relode,delCheckList,cardId}) => {
   const [checkedItems, setCheckedItems] = useState([]);
 
   useEffect(() => {
-    if (!loading && items.length > 0) {
+    if (!loading ) {
       setCheckedItems(items.map((item) => ({ ...item,checked:(item.state=='complete'?true:false)})));
     }
-  }, [loading, items]);
+  }, [items]);
 
   const toggleCheck = async (index,checkItemId) => {
     let state=''
@@ -59,16 +60,20 @@ const SingleChecklist = ({ id ,relode,delCheckList,cardId}) => {
       }
        const createUrl=`https://api.trello.com/1/checklists/${id}/checkItems?name=${name}&key=${apikey}&token=${apiToken}`
        await axios.post(createUrl);
+       toast.success('CheckItem created SuccessFully')
        setRelodeData(prev=>!prev)
        setName('')
      }
-  async function delCheckItem(itemId){
-    let delUrl=`https://api.trello.com/1/checklists/${id}/checkItems/${itemId}?key=${apikey}&token=${apiToken}`
-    await axios.delete(delUrl);
-    setRelodeData(prev=>!prev);
 
+
+  async function delCheckItem(itemId){
+    const confirm = window.confirm('Are you sure you want to delete this CheckItem?')
+      if(!confirm)return ;
+    let delUrl=`https://api.trello.com/1/checklists/${id}/checkItems/${itemId}?key=${apikey}&token=${apiToken}`
+    await axios.delete(delUrl)
+    toast.success('CheckItem Deleted SuccessFully')
+    setRelodeData(prev=>!prev);
   }
-  console.log(items);
   
   return (
     <Box w="100%" p={4} bg="gray.700" rounded="md" color="white">

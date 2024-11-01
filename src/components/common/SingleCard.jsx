@@ -3,6 +3,7 @@ import { FaTrash } from "react-icons/fa"
 import CardPage from "../../pages/CardPage";
 import { useState } from "react";
 import useGet from "../customHooks/useGet";
+import { toast } from "react-toastify";
 
 const SingleCard = ({cardId,setRelode}) => {
     const apikey=import.meta.env.VITE_API_KEY;
@@ -13,11 +14,13 @@ const SingleCard = ({cardId,setRelode}) => {
     const res=useGet(getCardUrl,cardRelode);
     const card=res.data;
     const loading=res.loading;
-    console.log(card);
 
     async function delteHandler(){
+      const confirm = window.confirm('Are you sure you want to delete this Card?')
+      if(!confirm)return ;
         const url=`https://api.trello.com/1/cards/${card.id}?key=${apikey}&token=${apiToken}`
         await axios.delete(url)
+        toast.success('Card Deleted SuccessFully')
         setRelode(prev=>!prev)
     }
     function redirect(){

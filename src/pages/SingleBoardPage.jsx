@@ -6,6 +6,7 @@ import { IoMdMenu } from "react-icons/io";
     import { LuCheck, LuPencilLine, LuX } from "react-icons/lu"
 import PopupMenu from '../components/common/PopupMenu';
 import List from '../components/common/List';
+import { toast } from 'react-toastify';
 
 const SingleBoard = () => {
     const [reloadData, setReloadData] = useState(false);
@@ -14,12 +15,12 @@ const SingleBoard = () => {
     const apiToken=import.meta.env.VITE_API_TOKEN
     const url=`https://api.trello.com/1/boards/${id}/lists?key=${apikey}&token=${apiToken}`;
     const {data,loading}=useGet(url,reloadData);
-    console.log(data)
     const [value,setValue]=useState('Create List')
     async function addList(){
         const postUrl = `https://api.trello.com/1/lists?name=${value}&idBoard=${id}&key=${apikey}&token=${apiToken}`;
         try {
           await axios.post(postUrl); 
+          toast.success('List Created SuccessFully')
           setValue('Create List'); 
           setReloadData((prev)=>!prev)
         } catch (error) {
@@ -27,9 +28,11 @@ const SingleBoard = () => {
         }
     }
     async function archiveList(id){
-      let closed=true;
+      const confirm = window.confirm('Are you sure you want to delete this List?')
+      if(!confirm)return ;
       const archiveUrl=`https://api.trello.com/1/lists/${id}/closed?key=${apikey}&token=${apiToken}&value=true`
       await axios.put(archiveUrl);
+      toast.success('List Deleted SuccessFully')
       setReloadData((prev)=>!prev);
     }
 

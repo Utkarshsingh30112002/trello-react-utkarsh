@@ -7,6 +7,7 @@ import { Editable, IconButton } from "@chakra-ui/react"
 import { LuCheck, LuPencilLine, LuX } from "react-icons/lu"
 import SingleBoard from '../../pages/SingleBoardPage'
 import SingleCard from './SingleCard'
+import { toast } from 'react-toastify'
 
 const List = ({curr,archiveList}) => {
     const [name, setName] = useState('');
@@ -25,6 +26,9 @@ const List = ({curr,archiveList}) => {
       await axios.post(createUrl);
       setName('')
       setRelode(prev=>!prev)
+      
+    toast.success('Card Created SuccessFully')
+   
     }
 
   return (
