@@ -1,13 +1,13 @@
 import { Box, Card } from "@chakra-ui/react";
-import PopupMenu from "./PopupMenu";
-import useGet from "../customHooks/useGet";
 import { FaPlus } from "react-icons/fa";
 import { Editable, IconButton } from "@chakra-ui/react";
 import { LuCheck, LuX } from "react-icons/lu";
-import SingleCard from "./SingleCard";
 import { toast } from "react-toastify";
 import { useState } from "react";
+
 import { addCardUrl, allCardsInListUrl } from "../../utility/apiUrl";
+import SingleCard from "./SingleCard";import PopupMenu from "./PopupMenu";
+import useGet from "../customHooks/useGet";
 
 const List = ({ curr, archiveList }) => {
   const [name, setName] = useState("");

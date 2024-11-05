@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import useGet from "../customHooks/useGet";
 import {
   Box,
   Heading,
@@ -23,6 +22,7 @@ import {
   getAllCheckListUrl,
   toggleCheckUrl,
 } from "../../utility/apiUrl";
+import useGet from "../customHooks/useGet";
 
 const SingleChecklist = ({ id, delCheckList, cardId }) => {
   const [relodeData, setRelodeData] = useState(true);

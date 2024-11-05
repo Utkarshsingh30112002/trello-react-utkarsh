@@ -12,12 +12,11 @@ import { useState } from "react";
 
 const PopupForm = ({ addBoard, title }) => {
   const [value, setValue] = useState("");
-
   function handleSubmit(e) {
     e.preventDefault();
     addBoard(value.trim());
 
-    setValue(""); // Clear the input after submission
+    setValue("");
   }
   return (
     <PopoverRoot colorPalette="gray">
