@@ -1,35 +1,26 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import useGet from "../components/customHooks/useGet";
-import {
-  Card,
-  HStack,
-  Grid,
-  Editable,
-  IconButton,
-  Spinner,
-} from "@chakra-ui/react";
-import { LuCheck, LuPencilLine, LuX } from "react-icons/lu";
-import List from "../components/common/List";
+import { HStack, Grid, Spinner } from "@chakra-ui/react";
 import { toast } from "react-toastify";
-import {
-  addListInBoardUrl,
-  allListInBoardUrl,
-  archiveListUrl,
-} from "../utility/apiUrl";
+
+import List from '../components/singleBoardPage/List';
+import {addListInBoardUrl,allListInBoardUrl,archiveListUrl} from "../utility/apiUrl";
+import EditableCard from "../components/singleBoardPage/EditableCard";
 
 const SingleBoard = () => {
   const [reloadData, setReloadData] = useState(false);
   const { id } = useParams();
   const url = allListInBoardUrl(id);
   const { data, loading } = useGet(url, reloadData);
-  const [value, setValue] = useState("Create List");
+  const [value, setValue] = useState("");
+
   async function addList() {
     const postUrl = addListInBoardUrl(value, id);
     try {
       await axios.post(postUrl);
       toast.success("List Created SuccessFully");
-      setValue("Create List");
+      setValue("");
       setReloadData((prev) => !prev);
     } catch (error) {
       console.error("Error creating list:", error);
@@ -62,34 +53,7 @@ const SingleBoard = () => {
             <List curr={curr} key={i} archiveList={archiveList} />
           ))
         )}
-        <Card.Root w="300px" bgColor="black" color="white" alignSelf="start">
-          <Editable.Root
-            defaultValue={value}
-            value={value}
-            onValueCommit={addList}
-            onValueChange={(e) => setValue(e.value)}
-          >
-            <Editable.Preview />
-            <Editable.Input h="100px" m="1" />
-            <Editable.Control>
-              <Editable.EditTrigger asChild>
-                <IconButton variant="ghost" size="xs">
-                  <LuPencilLine color="white" />
-                </IconButton>
-              </Editable.EditTrigger>
-              <Editable.CancelTrigger asChild>
-                <IconButton variant="outline" size="xs" color="white">
-                  <LuX color="white" />
-                </IconButton>
-              </Editable.CancelTrigger>
-              <Editable.SubmitTrigger asChild>
-                <IconButton variant="outline" size="xs" color="white">
-                  <LuCheck color="white" />
-                </IconButton>
-              </Editable.SubmitTrigger>
-            </Editable.Control>
-          </Editable.Root>
-        </Card.Root>
+        <EditableCard value={value} addList={addList} setValue={setValue} />
       </HStack>
     </Grid>
   );

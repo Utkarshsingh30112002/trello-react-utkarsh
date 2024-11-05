@@ -6,7 +6,8 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 
 import { addCardUrl, allCardsInListUrl } from "../../utility/apiUrl";
-import SingleCard from "./SingleCard";import PopupMenu from "./PopupMenu";
+import SingleCard from "./SingleCard";
+import PopupMenu from "../common/PopupMenu";
 import useGet from "../customHooks/useGet";
 
 const List = ({ curr, archiveList }) => {

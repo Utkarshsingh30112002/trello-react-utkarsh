@@ -7,13 +7,21 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Grid, GridItem, Spinner } from "@chakra-ui/react";
-import SingleChecklist from "../components/common/SingleChecklist";
-import PopupForm from "../components/common/PopupForm";
+
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { addCheckListUrl, delCheckListUrl } from "../utility/apiUrl";
+import SingleChecklist from "../components/common/SingleChecklist";
+import PopupForm from "../components/common/PopupForm";
 
-const CardPage = ({ open, setOpen, card, relode, setRelode, loading }) => {
+const CardPage = ({
+  open,
+  setOpen,
+  card,
+  relode,
+  setRelode,
+  loading,
+}) => {
   const [relodeData, setRelodeData] = useState(true);
 
   async function addCheckList(name) {
