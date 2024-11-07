@@ -1,4 +1,4 @@
-import { Box, Card } from "@chakra-ui/react";
+import { Box, Card, Spinner } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa";
 import { Editable, IconButton } from "@chakra-ui/react";
 import { LuCheck, LuX } from "react-icons/lu";
@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { addCardUrl, allCardsInListUrl } from "../../utility/apiUrl";
 import SingleCard from "./SingleCard";
 import PopupMenu from "../common/PopupMenu";
-import useGet from "../customHooks/useGet";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllCards } from "../../redux/slices/allCardsSlice";
 
@@ -22,10 +21,14 @@ const List = ({ curr, archiveList }) => {
     dispatch(fetchAllCards({listId:curr.id,url:cardsUrl}))
   }
 
+  if(error){
+    navigate(`/${error}`)
+  }
+
   useEffect(()=>{
     fetchCards()
   },[])
-  
+
   async function addCard() {
     if (!name.trim()) {
       setName("");
@@ -47,8 +50,8 @@ const List = ({ curr, archiveList }) => {
         </Box>
       </Card.Title>
       <Card.Body>
-        {loading[curr.id]?'loading':data[curr.id]?.map((card, i) => (
-          <SingleCard key={i} card={card} loading={loading[curr.id]} relode={fetchCards}/>
+        {loading[curr.id]?<Spinner/>:data[curr.id]?.map((card, i) => (
+          <SingleCard key={i} card={card} relode={fetchCards}/>
         ))}
       </Card.Body>
       <Card.Footer>

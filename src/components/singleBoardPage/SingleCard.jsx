@@ -1,14 +1,11 @@
-import { Text, Box, IconButton, Spinner } from "@chakra-ui/react";
+import { Text, Box, IconButton } from "@chakra-ui/react";
 import { FaTrash } from "react-icons/fa";
 import CardPage from "../../pages/CardPage";
-import { useEffect, useState } from "react";
-import useGet from "../customHooks/useGet";
+import { useState } from "react";
 import { toast } from "react-toastify";
-import { delACardUrl, getACardUrl } from "../../utility/apiUrl";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchACard } from "../../redux/slices/cardSlice";
+import { delACardUrl } from "../../utility/apiUrl";
 
-const SingleCard = ({ card,loading,relode}) => {
+const SingleCard = ({ card,relode}) => {
   const [open, setOpen] = useState(false);
 
   async function delteHandler() {
@@ -34,7 +31,7 @@ const SingleCard = ({ card,loading,relode}) => {
       />
       <Box onClick={redirect} display="flex" alignItems="center">
         <Text color="white" pl="5px">
-          {loading ? <Spinner /> : card.name}
+          {card.name}
         </Text>
       </Box>
       <Box flexGrow="1" onClick={redirect}></Box>

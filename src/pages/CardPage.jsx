@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Grid, GridItem, Spinner } from "@chakra-ui/react";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { addCheckListUrl, delCheckListUrl, getACardUrl } from "../utility/apiUrl";
 import SingleChecklist from "../components/common/SingleChecklist";
@@ -27,8 +27,12 @@ const CardPage = ({
   useEffect(()=>{
     dispatch(fetchACard({url:getCardUrl,cardId}))
   },[])
-  const {data,loading:loading}=useSelector(state=>state.card)
+  const {data,loading:loading,error}=useSelector(state=>state.card)
   const card=data[cardId]||{}
+
+  if(error){
+    navigate(`/${error}`)
+  }
 
 
   async function addCheckList(name) {

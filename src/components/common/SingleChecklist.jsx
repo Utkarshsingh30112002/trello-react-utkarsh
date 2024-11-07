@@ -28,7 +28,7 @@ import { fetchCheckList } from "../../redux/slices/checkListSlice";
 const SingleChecklist = ({ id, delCheckList, cardId }) => {
   const dispatch=useDispatch()
   const url = getAllCheckListUrl(id);
-  const {data,loading:checkListLoading} = useSelector(state=>state.checkList)//useGet(url, relodeData);
+  const {data,loading:checkListLoading} = useSelector(state=>state.checkList)
   const checklist=data[id]||{}
   const loading = checkListLoading[id];
   const title = loading ? "" : checklist.name || "";
