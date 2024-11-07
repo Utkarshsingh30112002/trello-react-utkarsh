@@ -8,27 +8,34 @@ import {
 } from "@/components/ui/dialog";
 import { Grid, GridItem, Spinner } from "@chakra-ui/react";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { addCheckListUrl, delCheckListUrl } from "../utility/apiUrl";
+import { addCheckListUrl, delCheckListUrl, getACardUrl } from "../utility/apiUrl";
 import SingleChecklist from "../components/common/SingleChecklist";
 import PopupForm from "../components/common/PopupForm";
+import { fetchACard } from "../redux/slices/cardSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const CardPage = ({
   open,
   setOpen,
-  card,
-  relode,
-  setRelode,
-  loading,
+  cardId
 }) => {
-  const [relodeData, setRelodeData] = useState(true);
+  const getCardUrl = getACardUrl(cardId);
+  const dispatch=useDispatch()
+
+  useEffect(()=>{
+    dispatch(fetchACard({url:getCardUrl,cardId}))
+  },[])
+  const {data,loading:loading}=useSelector(state=>state.card)
+  const card=data[cardId]||{}
+
 
   async function addCheckList(name) {
     if (!name) return;
-    await axios.post(addCheckListUrl(name, card.id));
+    await axios.post(addCheckListUrl(name, cardId));
     toast.success("CheckList Added SuccessFully");
-    setRelode((prev) => !prev);
+    dispatch(fetchACard({url:getCardUrl,cardId}))
   }
   async function delCheckList(checklistId) {
     const confirm = window.confirm(
@@ -38,7 +45,8 @@ const CardPage = ({
     const delUrl = delCheckListUrl(checklistId);
     await axios.delete(delUrl);
     toast.success("CheckList Deleted SuccessFully");
-    setRelode((prev) => !prev);
+    dispatch(fetchACard({url:getCardUrl,cardId}))
+    console.log('working')
   }
   return (
     <DialogRoot
@@ -56,20 +64,16 @@ const CardPage = ({
         <DialogBody>
           <Grid templateColumns={"repeat(6,1fr)"} gap={2}>
             <GridItem colSpan={5}>
-              {loading ? (
+              {loading[cardId] ? (
                 <Spinner />
               ) : (
-                card.idChecklists.map((currId, i) => {
+                data[cardId]?.idChecklists.map((currId) => {
                   return (
                     <SingleChecklist
                       key={currId}
                       id={currId}
-                      relode={relode}
-                      setRelode={setRelode}
                       delCheckList={delCheckList}
-                      relodeData={relodeData}
-                      setRelodeData={setRelodeData}
-                      cardId={card.id}
+                      cardId={cardId}
                     />
                   );
                 })

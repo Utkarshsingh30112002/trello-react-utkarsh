@@ -22,19 +22,23 @@ import {
   getAllCheckListUrl,
   toggleCheckUrl,
 } from "../../utility/apiUrl";
-import useGet from "../customHooks/useGet";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCheckList } from "../../redux/slices/checkListSlice";
 
 const SingleChecklist = ({ id, delCheckList, cardId }) => {
-  const [relodeData, setRelodeData] = useState(true);
+  const dispatch=useDispatch()
   const url = getAllCheckListUrl(id);
-  const checklist = useGet(url, relodeData);
-  const loading = checklist.loading;
-  const title = loading ? "" : checklist.data.name || "";
-  const items = loading ? [] : checklist.data.checkItems || [];
+  const {data,loading:checkListLoading} = useSelector(state=>state.checkList)//useGet(url, relodeData);
+  const checklist=data[id]||{}
+  const loading = checkListLoading[id];
+  const title = loading ? "" : checklist.name || "";
+  const items = loading ? [] : checklist.checkItems || [];
   const [name, setName] = useState("");
 
   const [checkedItems, setCheckedItems] = useState([]);
-
+  useEffect(()=>{
+      dispatch(fetchCheckList({id,url}))
+    },[])
   useEffect(() => {
     if (!loading) {
       setCheckedItems(
@@ -72,7 +76,7 @@ const SingleChecklist = ({ id, delCheckList, cardId }) => {
     const createUrl = addCheckItemUrl(id, name);
     await axios.post(createUrl);
     toast.success("CheckItem created SuccessFully");
-    setRelodeData((prev) => !prev);
+    dispatch(fetchCheckList({id,url}))
     setName("");
   }
 
@@ -84,7 +88,7 @@ const SingleChecklist = ({ id, delCheckList, cardId }) => {
     let delUrl = delCheckItemUrl(id, itemId);
     await axios.delete(delUrl);
     toast.success("CheckItem Deleted SuccessFully");
-    setRelodeData((prev) => !prev);
+    dispatch(fetchCheckList({id,url}))
   }
 
   return (
@@ -105,11 +109,11 @@ const SingleChecklist = ({ id, delCheckList, cardId }) => {
           <IconButton
             size="xs"
             bg="gray.700"
-            onClick={() => delCheckList(checklist.data.id)}
+            onClick={() => delCheckList(checklist.id)}
           >
             <FaTrash />
           </IconButton>
-        </HStack>
+        </HStack> {Math.floor(progress)}%
         <ProgressBar maxWidth="450px" />
       </ProgressRoot>
 
@@ -161,7 +165,7 @@ const SingleChecklist = ({ id, delCheckList, cardId }) => {
                 bg="#22272B"
                 px="10px"
               >
-                <FaPlus /> Add Card
+                <FaPlus /> Add CheckItem
               </IconButton>
             </Editable.EditTrigger>
 

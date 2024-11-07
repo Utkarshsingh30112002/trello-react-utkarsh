@@ -1,18 +1,15 @@
 import { Text, Box, IconButton, Spinner } from "@chakra-ui/react";
 import { FaTrash } from "react-icons/fa";
 import CardPage from "../../pages/CardPage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useGet from "../customHooks/useGet";
 import { toast } from "react-toastify";
 import { delACardUrl, getACardUrl } from "../../utility/apiUrl";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchACard } from "../../redux/slices/cardSlice";
 
-const SingleCard = ({ cardId, setRelode }) => {
+const SingleCard = ({ card,loading,relode}) => {
   const [open, setOpen] = useState(false);
-  const [cardRelode, setCardRelode] = useState(false);
-  const getCardUrl = getACardUrl(cardId);
-  const res = useGet(getCardUrl, cardRelode);
-  const card = res.data;
-  const loading = res.loading;
 
   async function delteHandler() {
     const confirm = window.confirm(
@@ -22,7 +19,7 @@ const SingleCard = ({ cardId, setRelode }) => {
     const url = delACardUrl(card.id);
     await axios.delete(url);
     toast.success("Card Deleted SuccessFully");
-    setRelode((prev) => !prev);
+    relode()
   }
   function redirect() {
     setOpen(true);
@@ -33,10 +30,7 @@ const SingleCard = ({ cardId, setRelode }) => {
       <CardPage
         open={open}
         setOpen={setOpen}
-        card={card}
-        relode={cardRelode}
-        setRelode={setCardRelode}
-        loading={loading}
+        cardId={card.id}
       />
       <Box onClick={redirect} display="flex" alignItems="center">
         <Text color="white" pl="5px">
